@@ -1,0 +1,118 @@
+{{> head}}
+<body>
+  <div class="app-shell supplier-directory-shell">
+    <aside class="sidebar supplier-reference-sidebar">
+      <a class="brand" href="/dashboard" aria-label="JAPZ GRILL Supplier Management home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.5 2.8c.5 3.2-1.6 4.4-3 6.1-1.2 1.4-1.8 2.8-1.8 4.5a4.3 4.3 0 0 0 8.6 0c0-1.2-.5-2.4-1.4-3.3.1 2-1 2.7-2 2.7-1.1 0-1.9-.9-1.9-2 0-1 .6-1.8 1.4-2.7 1.4-1.5 2.4-3.2 2.2-5.3 2.8 2.4 4.6 5.9 4.6 9.5a7.2 7.2 0 0 1-14.4 0c0-4 2.3-7.5 7.7-9.5Z"></path></svg></span>
+        <span><strong>JAPZ<span>GRILL</span></strong><small>BURGER &amp; BISTRO</small></span>
+      </a>
+      <div class="nav-caption">OPERATIONS</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-item" href="/dashboard"><span class="nav-icon">⊞</span> Dashboard</a>
+        <a class="nav-item active" href="/suppliers"><span class="nav-icon">♧</span> Suppliers <span class="nav-count">{{totalSuppliers}}</span></a>
+        <a class="nav-item" href="/products"><span class="nav-icon">◇</span> Products &amp; supplies</a>
+        <a class="nav-item" href="/orders"><span class="nav-icon">▤</span> Purchase orders <span class="nav-indicator"></span></a>
+        <a class="nav-item" href="/deliveries"><span class="nav-icon">⬡</span> Deliveries</a>
+        <a class="nav-item" href="/transactions"><span class="nav-icon">▣</span> Transactions</a>
+        <a class="nav-item" href="/reports"><span class="nav-icon">♧</span> Reports</a>
+      </nav>
+      <div class="supplier-sidebar-bottom">
+        <a class="nav-item supplier-settings-link" href="/settings"><span class="nav-icon">☷</span> Settings</a>
+        <a class="supplier-business-link" href="/settings"><span class="supplier-business-mark">♧</span><span><strong>Japz Grill &amp; Bistro</strong><small>San Jose, Philippines</small></span><span class="supplier-business-chevron">⌃</span></a>
+        <a class="supplier-user-link" href="/settings"><span class="supplier-user-avatar">JM</span><span><strong>J. Mendoza</strong><small>Administrator</small></span><span class="supplier-user-menu">•••</span></a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><strong>{{businessName}}</strong><span>›</span><strong>Suppliers</strong></div>
+        <div class="topbar-right">
+          <svg class="directory-date-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2"></rect><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9.5h17"></path></svg>
+          <span class="today-label" id="today-label"></span>
+          <span class="directory-notification" role="img" aria-label="Notifications"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg><i></i></span>
+          <span class="topbar-avatar">JG</span>
+        </div>
+      </header>
+
+      <section class="page-content supplier-directory-content">
+        <div class="welcome-row">
+          <div>
+            <div class="eyebrow">DIRECTORY</div>
+            <h1>Suppliers</h1>
+            <p class="page-subtitle">Manage your ingredient and restaurant supply partners.</p>
+          </div>
+          <button class="button button-primary" type="button" data-open-add><span class="button-plus">+</span> Add supplier</button>
+        </div>
+
+        {{#if successMessage}}<div class="notice notice-success" role="status">{{successMessage}}</div>{{/if}}
+        {{#if errorMessage}}<div class="notice notice-error" role="alert">{{errorMessage}}</div>{{/if}}
+
+        <section class="directory-card supplier-list-card">
+          <div class="supplier-directory-toolbar">
+            <div class="directory-actions">
+              <label class="search-box"><span aria-hidden="true">⌕</span><input id="supplier-search" type="search" placeholder="Search suppliers, contact, email..." aria-label="Search suppliers"></label>
+              <label class="filter-label"><span class="sr-only">Filter by category</span><select id="category-filter"><option value="">All categories</option>{{#each categories}}<option value="{{this}}">{{this}}</option>{{/each}}</select></label>
+              <label class="filter-label"><span class="sr-only">Filter by status</span><select id="status-filter"><option value="">All statuses</option><option>Active</option><option>Inactive</option></select></label>
+            </div>
+            <button class="button button-secondary supplier-export-button" type="button" id="export-suppliers"><span aria-hidden="true">⇩</span> Export</button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="supplier-table supplier-directory-table">
+              <thead><tr><th>SUPPLIER</th><th>CATEGORY</th><th>CONTACT PERSON</th><th>CONTACT DETAILS</th><th>PAYMENT TERMS</th><th>STATUS</th><th><span class="sr-only">Actions</span></th></tr></thead>
+              <tbody id="supplier-rows">
+                {{#each suppliers}}
+                <tr data-search="{{supplierCode}} {{name}} {{contactPerson}} {{phone}} {{email}} {{address}} {{category}} {{paymentTerms}}" data-category="{{category}}" data-status="{{status}}">
+                  <td><a class="supplier-name-link" href="/suppliers/{{id}}"><div class="supplier-identity"><span class="supplier-avatar">{{initials}}</span><span><strong>{{name}}</strong><small>{{supplierCode}}</small></span></div></a></td>
+                  <td><span class="category-pill">{{category}}</span></td>
+                  <td><span class="contact-name">{{contactPerson}}</span></td>
+                  <td><span class="contact-name">{{phone}}</span><small class="contact-phone">{{#if email}}{{email}}{{else}}Email not provided{{/if}}</small></td>
+                  <td><span class="terms-label">{{paymentTerms}}</span></td>
+                  <td><span class="status-pill {{#if isActive}}status-active{{else}}status-inactive{{/if}}"><span></span>{{status}}</span></td>
+                  <td>
+                    <div class="row-actions">
+                      <a class="icon-button view-supplier" href="/suppliers/{{id}}" aria-label="View {{name}}" title="View supplier"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg></a>
+                      <button class="icon-button edit-supplier" type="button" aria-label="Edit {{name}}" title="Edit supplier"
+                        data-id="{{id}}" data-name="{{name}}" data-contact="{{contactPerson}}" data-phone="{{phone}}" data-email="{{email}}"
+                        data-address="{{address}}" data-category="{{category}}" data-terms="{{paymentTerms}}" data-status="{{status}}" data-notes="{{notes}}"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m4 16.5-.8 4.3 4.3-.8L20 7.5 16.5 4 4 16.5Z"></path><path d="m14.8 5.7 3.5 3.5"></path></svg></button>
+                      {{#if isActive}}
+                      <form action="/suppliers/{{id}}/status" method="post" class="archive-form"><input type="hidden" name="status" value="Inactive"><button class="icon-button archive-supplier" type="submit" aria-label="Archive {{name}}" title="Archive supplier">⌑</button></form>
+                      {{else}}
+                      <form action="/suppliers/{{id}}/status" method="post" class="archive-form"><input type="hidden" name="status" value="Active"><button class="icon-button" type="submit" aria-label="Reactivate {{name}}" title="Reactivate supplier">↻</button></form>
+                      {{/if}}
+                    </div>
+                  </td>
+                </tr>
+                {{else}}
+                <tr class="empty-row"><td colspan="7"><div class="empty-state"><span class="empty-mark">♧</span><strong>No suppliers yet</strong><p>Add your first supplier to start building your directory.</p><button class="button button-secondary" type="button" data-open-add>Add your first supplier</button></div></td></tr>
+                {{/each}}
+                <tr class="no-results" id="no-results" hidden><td colspan="7">No suppliers match your search and filters.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-footer"><span>Showing <strong id="visible-count">{{totalSuppliers}}</strong> suppliers</span><span class="directory-pagination" aria-label="Page 1">1</span></div>
+        </section>
+        <footer class="page-footer">{{businessName}} <span>•</span> Supplier Management</footer>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="supplier-dialog" id="supplier-dialog" aria-labelledby="dialog-title">
+    <form id="supplier-form" method="post" action="/suppliers">
+      <div class="dialog-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> SUPPLIER DIRECTORY</div><h2 id="dialog-title">Add supplier</h2><p>Enter the business and contact details below.</p></div><button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">×</button></div>
+      <div class="form-grid">
+        <label class="form-field field-wide">Supplier name <span>*</span><input name="name" required minlength="2" maxlength="120" placeholder="e.g. Fresh Fields Trading"></label>
+        <label class="form-field">Contact person <span>*</span><input name="contactPerson" required maxlength="120" placeholder="Full name"></label>
+        <label class="form-field">Contact number <span>*</span><input name="phone" required maxlength="40" type="tel" placeholder="+63 9XX XXX XXXX"></label>
+        <label class="form-field field-wide">Email address<input name="email" type="email" maxlength="160" placeholder="name@business.com"></label>
+        <label class="form-field field-wide">Complete address <span>*</span><textarea name="address" required rows="2" placeholder="Street, barangay, city"></textarea></label>
+        <label class="form-field">Supply category <span>*</span><select name="category" required><option value="">Select category</option>{{#each categories}}<option value="{{this}}">{{this}}</option>{{/each}}</select></label>
+        <label class="form-field">Payment terms <span>*</span><select name="paymentTerms" required><option value="">Select terms</option><option>Cash</option><option>COD</option><option>7 days</option><option>15 days</option><option>30 days</option></select></label>
+        <label class="form-field field-wide">Notes<textarea name="notes" rows="2" placeholder="Additional details (optional)"></textarea></label>
+      </div>
+      <div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>Cancel</button><button class="button button-primary" type="submit">Save supplier</button></div>
+    </form>
+  </dialog>
+
+  <script src="/js/supplier.js" defer></script>
+{{> footer }}

@@ -1,0 +1,57 @@
+{{> head}}
+<body class="login-page">
+  <main class="login-layout">
+    <section class="login-story" aria-label="JAPZ GRILL supplier management">
+      <a class="login-brand" href="/login" aria-label="JAPZ GRILL home">
+        <span class="login-brand-mark">J</span>
+        <span><strong>JAPZ GRILL</strong><small>BURGER &amp; BISTRO</small></span>
+      </a>
+
+      <div class="story-copy">
+        <div class="story-kicker"><span></span> MADE FRESH, SOURCED RIGHT</div>
+        <h1>Good food starts with the <em>right partners.</em></h1>
+        <p>Keep the people and ingredients behind every JAPZ favorite close at hand.</p>
+      </div>
+
+      <div class="kitchen-card" aria-label="Restaurant supply categories">
+        <div class="kitchen-card-top"><span class="kitchen-label">THE JAPZ KITCHEN</span><span class="kitchen-open"><i></i> READY FOR SERVICE</span></div>
+        <div class="ingredient-art">
+          <img src="/images/japz-burger-login.png" alt="JAPZ GRILL burger with fresh lettuce, tomato, and cheese" />
+        </div>
+        <div class="kitchen-card-bottom">
+          <div><strong>From trusted suppliers,</strong><span>to the table you love.</span></div>
+          <span class="kitchen-arrow">↗</span>
+        </div>
+      </div>
+
+      <div class="supply-tags" aria-label="Supply categories">
+        <span>MEAT &amp; POULTRY</span><i></i><span>FRESH PRODUCE</span><i></i><span>DAILY ESSENTIALS</span>
+      </div>
+      <div class="story-footer"><span>JAPZ GRILL &amp; BISTRO</span><span>SUPPLIER MANAGEMENT <i>•</i> 2026</span></div>
+    </section>
+
+    <section class="login-panel">
+      <div class="login-mobile-brand"><span class="login-brand-mark">J</span><strong>JAPZ GRILL</strong></div>
+      <div class="login-card">
+        <div class="login-eyebrow"><span class="login-eyebrow-icon">✳</span> SUPPLIER PORTAL</div>
+        <h2>Welcome back<span>.</span></h2>
+        <p class="login-description">Sign in to manage your suppliers and restaurant supplies.</p>
+
+        {{#if errorMessage}}<div class="login-error" role="alert"><span class="error-icon">!</span><span>{{errorMessage}}</span></div>{{/if}}
+
+        <form class="login-form" method="POST" action="/login">
+          <label for="login-email">Email address</label>
+          <div class="login-input-wrap"><span class="input-icon" aria-hidden="true">✉</span><input id="login-email" type="email" name="email" placeholder="you@business.com" autocomplete="email" required /></div>
+
+          <div class="password-label-row"><label for="login-password">Password</label><a href="/forgot-password">Forgot password?</a></div>
+          <div class="login-input-wrap"><span class="input-icon lock-icon" aria-hidden="true">▣</span><input id="login-password" type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required /></div>
+
+          <button type="submit" class="login-submit">Sign in <span aria-hidden="true">→</span></button>
+        </form>
+
+        <div class="login-register">New to the supplier portal? <a href="/register">Create an account <span aria-hidden="true">↗</span></a></div>
+      </div>
+      <div class="login-panel-footer"><span><i></i> JAPZ GRILL SUPPLIER MANAGEMENT</span><span>GOOD FOOD. GOOD PARTNERS.</span></div>
+    </section>
+  </main>
+{{> footer }}

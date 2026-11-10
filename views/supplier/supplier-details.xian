@@ -1,0 +1,81 @@
+{{> head}}
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="/dashboard"><span class="brand-mark">J</span><span><strong>{{businessName}}</strong><small>SUPPLIER PORTAL</small></span></a>
+      <div class="nav-caption">MAIN MENU</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-item" href="/dashboard"><span class="nav-icon">▦</span> Dashboard</a>
+        <a class="nav-item active" href="/suppliers"><span class="nav-icon">♧</span> Suppliers</a>
+        <a class="nav-item" href="/products"><span class="nav-icon">◇</span> Products &amp; Supplies</a>
+        <a class="nav-item" href="/orders"><span class="nav-icon">▤</span> Purchase orders</a>
+        <a class="nav-item" href="/deliveries"><span class="nav-icon">↗</span> Delivery management</a>
+        <a class="nav-item" href="/transactions"><span class="nav-icon">₱</span> Transactions</a>
+        <a class="nav-item" href="/reports"><span class="nav-icon">▥</span> Reports</a>
+        <a class="nav-item" href="/settings"><span class="nav-icon">⚙</span> Settings</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card"><span class="help-dot"></span><div><strong>Supplier management</strong><small>Keep your partners organized.</small></div></div>
+        <a class="profile-link" href="/settings"><span class="profile-avatar">JG</span><span><strong>Japz Grill</strong><small>Settings</small></span><span class="logout-mark">⚙</span></a>
+        <a class="signout-link" href="/logout">Sign out <span>↗</span></a>
+      </div>
+    </aside>
+    <main class="main-content">
+      <header class="topbar"><div class="breadcrumb"><a href="/dashboard">Dashboard</a><span>/</span><a href="/suppliers">Suppliers</a><span>/</span><strong>Details</strong></div><div class="topbar-right"><span class="today-label" id="today-label"></span><span class="topbar-avatar">JG</span></div></header>
+      <section class="page-content operations-content">
+        <div class="welcome-row">
+          <div class="supplier-detail-heading"><a class="back-link" href="/suppliers">← Supplier directory</a><div class="supplier-detail-title"><span class="supplier-avatar supplier-avatar-large">{{supplier.initials}}</span><span><div class="eyebrow"><span class="eyebrow-line"></span> {{supplier.supplierCode}}</div><h1>{{supplier.name}}</h1><p class="page-subtitle">{{supplier.category}} <span class="detail-separator">•</span> <span class="status-pill {{#if supplier.isActive}}status-active{{else}}status-inactive{{/if}}"><span></span>{{supplier.status}}</span></p></span></div></div>
+          <a class="button button-secondary" href="/suppliers">Back to suppliers</a>
+        </div>
+        {{#if successMessage}}<div class="notice notice-success" role="status">{{successMessage}}</div>{{/if}}
+        {{#if errorMessage}}<div class="notice notice-error" role="alert">{{errorMessage}}</div>{{/if}}
+
+        <section class="metrics-grid ops-metrics detail-metrics">
+          <article class="metric-card"><span class="metric-label">Total purchases</span><div class="metric-value">{{currencySymbol}}{{totalPurchases}}</div><div class="metric-foot">Non-cancelled purchase orders</div></article>
+          <article class="metric-card"><span class="metric-label">Total paid</span><div class="metric-value">{{currencySymbol}}{{totalPaid}}</div><div class="metric-foot">Recorded supplier payments</div></article>
+          <article class="metric-card"><span class="metric-label">Outstanding balance</span><div class="metric-value">{{currencySymbol}}{{outstandingBalance}}</div><div class="metric-foot">Remaining order balances</div></article>
+        </section>
+
+        <section class="directory-card ops-card supplier-info-card">
+          <div class="directory-heading"><div><h2>Supplier information</h2><p>Business contact and payment details.</p></div><span class="category-pill">{{supplier.paymentTerms}} terms</span></div>
+          <dl class="supplier-info-grid">
+            <div><dt>Contact person</dt><dd>{{supplier.contactPerson}}</dd></div><div><dt>Contact number</dt><dd>{{supplier.phone}}</dd></div>
+            <div><dt>Email address</dt><dd>{{#if supplier.email}}{{supplier.email}}{{else}}Not provided{{/if}}</dd></div><div><dt>Supply category</dt><dd>{{supplier.category}}</dd></div>
+            <div class="info-wide"><dt>Business address</dt><dd>{{supplier.address}}</dd></div>
+            <div class="info-wide"><dt>Notes</dt><dd>{{#if supplier.notes}}{{supplier.notes}}{{else}}No additional notes{{/if}}</dd></div>
+          </dl>
+        </section>
+
+        <section class="directory-card ops-card">
+          <div class="directory-heading"><div><h2>Supplied products &amp; supplies</h2><p>Catalog items linked to this supplier.</p></div><a class="button button-secondary" href="/products">Manage products</a></div>
+          <div class="table-wrap"><table class="supplier-table ops-table"><thead><tr><th>PRODUCT</th><th>CATEGORY</th><th>UNIT</th><th>UNIT COST</th><th>ON HAND</th></tr></thead><tbody>
+            {{#each supplies}}<tr><td>{{name}}</td><td>{{category}}</td><td>{{unit}}</td><td>{{../currencySymbol}}{{unitCost}}</td><td>{{stockQuantity}}</td></tr>{{else}}<tr><td class="empty-message" colspan="5">No products are linked to this supplier yet.</td></tr>{{/each}}
+          </tbody></table></div>
+        </section>
+
+        <section class="directory-card ops-card">
+          <div class="directory-heading"><div><h2>Purchase order history</h2><p>Orders, fulfillment status, and remaining balances.</p></div><a class="button button-secondary" href="/orders">Manage orders</a></div>
+          <div class="table-wrap"><table class="supplier-table ops-table"><thead><tr><th>ORDER</th><th>DATE</th><th>ITEMS</th><th>STATUS</th><th>TOTAL</th><th>PAID</th><th>BALANCE</th></tr></thead><tbody>
+            {{#each orders}}<tr><td>{{orderNumber}}</td><td>{{orderDate}}</td><td class="items-cell">{{itemsLabel}}</td><td>{{status}}</td><td>{{../currencySymbol}}{{totalAmount}}</td><td>{{../currencySymbol}}{{amountPaid}}</td><td>{{../currencySymbol}}{{balance}}</td></tr>{{else}}<tr><td class="empty-message" colspan="7">No purchase orders for this supplier.</td></tr>{{/each}}
+          </tbody></table></div>
+        </section>
+
+        <section class="directory-card ops-card">
+          <div class="directory-heading"><div><h2>Delivery history</h2><p>Received quantities, damaged items, and receiving notes.</p></div><a class="button button-secondary" href="/deliveries">Manage deliveries</a></div>
+          <div class="table-wrap"><table class="supplier-table ops-table"><thead><tr><th>DATE</th><th>ORDER</th><th>ITEMS RECEIVED</th><th>RECEIVED BY</th><th>REMARKS</th></tr></thead><tbody>
+            {{#each deliveryHistory}}<tr><td>{{deliveryDate}}</td><td>{{orderNumber}}</td><td class="items-cell">{{itemsLabel}}</td><td>{{receivedBy}}</td><td>{{#if remarks}}{{remarks}}{{else}}—{{/if}}</td></tr>{{else}}<tr><td class="empty-message" colspan="5">No deliveries recorded for this supplier.</td></tr>{{/each}}
+          </tbody></table></div>
+        </section>
+
+        <section class="directory-card ops-card">
+          <div class="directory-heading"><div><h2>Transaction history</h2><p>Payments and references recorded for this supplier.</p></div><a class="button button-secondary" href="/transactions">Manage transactions</a></div>
+          <div class="table-wrap"><table class="supplier-table ops-table"><thead><tr><th>DATE</th><th>TYPE</th><th>ORDER</th><th>METHOD</th><th>REFERENCE</th><th>AMOUNT</th></tr></thead><tbody>
+            {{#each transactions}}<tr><td>{{transactionDate}}</td><td>{{type}}</td><td>{{#if orderNumber}}{{orderNumber}}{{else}}—{{/if}}</td><td>{{method}}</td><td>{{#if reference}}{{reference}}{{else}}—{{/if}}</td><td>{{../currencySymbol}}{{amount}}</td></tr>{{else}}<tr><td class="empty-message" colspan="6">No transactions recorded for this supplier.</td></tr>{{/each}}
+          </tbody></table></div>
+        </section>
+        <footer class="page-footer">{{businessName}} <span>•</span> Supplier Management</footer>
+      </section>
+    </main>
+  </div>
+  <script src="/js/supplier.js" defer></script>
+{{> footer }}

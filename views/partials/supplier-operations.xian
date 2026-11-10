@@ -1,0 +1,300 @@
+{{> head}}
+<body>
+  <div class="app-shell {{#if pageProducts}}products-directory-shell{{/if}}{{#if pageOrders}}purchase-orders-shell{{/if}}{{#if pageDeliveries}}deliveries-directory-shell{{/if}}{{#if pageTransactions}}transactions-directory-shell{{/if}}{{#if pageReports}}reports-directory-shell{{/if}}{{#if pageSettings}}settings-directory-shell{{/if}}">
+    <aside class="sidebar {{#if referenceSidebar}}supplier-reference-sidebar{{/if}}">
+      <a class="brand" href="/dashboard">
+        {{#if referenceSidebar}}
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.5 2.8c.5 3.2-1.6 4.4-3 6.1-1.2 1.4-1.8 2.8-1.8 4.5a4.3 4.3 0 0 0 8.6 0c0-1.2-.5-2.4-1.4-3.3.1 2-1 2.7-2 2.7-1.1 0-1.9-.9-1.9-2 0-1 .6-1.8 1.4-2.7 1.4-1.5 2.4-3.2 2.2-5.3 2.8 2.4 4.6 5.9 4.6 9.5a7.2 7.2 0 0 1-14.4 0c0-4 2.3-7.5 7.7-9.5Z"></path></svg></span>
+        <span><strong>JAPZ<span>GRILL</span></strong><small>BURGER &amp; BISTRO</small></span>
+        {{else}}
+        <span class="brand-mark">J</span><span><strong>{{businessName}}</strong><small>SUPPLIER PORTAL</small></span>
+        {{/if}}
+      </a>
+      <div class="nav-caption">{{#if referenceSidebar}}OPERATIONS{{else}}MAIN MENU{{/if}}</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <a class="nav-item {{#if navDashboard}}active{{/if}}" href="/dashboard"><span class="nav-icon">▦</span> Dashboard</a>
+        <a class="nav-item {{#if navSuppliers}}active{{/if}}" href="/suppliers"><span class="nav-icon">♧</span> Suppliers {{#if pageProducts}}<span class="nav-count">{{totalSuppliers}}</span>{{/if}}</a>
+        <a class="nav-item {{#if navProducts}}active{{/if}}" href="/products"><span class="nav-icon">◇</span> Products &amp; supplies</a>
+        <a class="nav-item {{#if navOrders}}active{{/if}}" href="/orders"><span class="nav-icon">▤</span> Purchase orders {{#if pageOrders}}<span class="nav-indicator"></span>{{/if}}</a>
+        <a class="nav-item {{#if navDeliveries}}active{{/if}}" href="/deliveries"><span class="nav-icon">↗</span> {{#if referenceSidebar}}Deliveries{{else}}Delivery management{{/if}}{{#if pageDeliveries}}<span class="nav-indicator"></span>{{/if}}</a>
+        <a class="nav-item {{#if navTransactions}}active{{/if}}" href="/transactions"><span class="nav-icon">₱</span> Transactions {{#if pageTransactions}}<span class="nav-indicator"></span>{{/if}}</a>
+        <a class="nav-item {{#if navReports}}active{{/if}}" href="/reports"><span class="nav-icon">▥</span> Reports</a>
+        {{#unless referenceSidebar}}<a class="nav-item {{#if navSettings}}active{{/if}}" href="/settings"><span class="nav-icon">⚙</span> Settings</a>{{/unless}}
+      </nav>
+      {{#if referenceSidebar}}
+      <div class="supplier-sidebar-bottom">
+        <a class="nav-item supplier-settings-link {{#if navSettings}}active{{/if}}" href="/settings"><span class="nav-icon">☷</span> Settings</a>
+        <a class="supplier-business-link" href="/settings"><span class="supplier-business-mark">♧</span><span><strong>Japz Grill &amp; Bistro</strong><small>San Jose, Philippines</small></span><span class="supplier-business-chevron">⌃</span></a>
+        <a class="supplier-user-link" href="/settings"><span class="supplier-user-avatar">JM</span><span><strong>J. Mendoza</strong><small>Administrator</small></span><span class="supplier-user-menu">•••</span></a>
+      </div>
+      {{else}}
+      <div class="sidebar-bottom">
+        <div class="help-card"><span class="help-dot"></span><div><strong>Supplier management</strong><small>Keep your partners organized.</small></div></div>
+        <a class="profile-link" href="/settings"><span class="profile-avatar">JG</span><span><strong>Japz Grill</strong><small>Settings</small></span><span class="logout-mark">⚙</span></a>
+        <a class="signout-link" href="/logout">Sign out <span>↗</span></a>
+      </div>
+      {{/if}}
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><a href="/dashboard">{{#if referenceSidebar}}{{businessName}}{{else}}Dashboard{{/if}}</a><span>›</span><strong>{{#if pageProducts}}Products &amp; supplies{{else}}{{#if pageOrders}}Purchase orders{{else}}{{#if pageDeliveries}}Deliveries{{else}}{{#if pageTransactions}}Transactions{{else}}{{#if pageReports}}Reports{{else}}{{title}}{{/if}}{{/if}}{{/if}}{{/if}}{{/if}}</strong></div>
+        <div class="topbar-right">
+          {{#if referenceSidebar}}<svg class="directory-date-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2"></rect><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9.5h17"></path></svg>{{/if}}
+          <span class="today-label" id="today-label"></span>
+          {{#if referenceSidebar}}<span class="directory-notification" role="img" aria-label="Notifications"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg><i></i></span>{{/if}}
+          <span class="topbar-avatar">{{#if pageSettings}}JM{{else}}JG{{/if}}</span>
+        </div>
+      </header>
+      <section class="page-content operations-content {{#if pageProducts}}products-directory-content{{/if}}{{#if pageOrders}}purchase-orders-content{{/if}}{{#if pageDeliveries}}deliveries-directory-content{{/if}}{{#if pageTransactions}}transactions-directory-content{{/if}}{{#if pageReports}}reports-directory-content{{/if}}{{#if pageSettings}}settings-directory-content{{/if}}">
+        <div class="welcome-row">
+          <div><div class="eyebrow">{{#if pageSettings}}PREFERENCES{{else}}{{#if pageReports}}INSIGHTS{{else}}{{#if pageProducts}}INVENTORY{{else}}{{#if pageOrders}}PROCUREMENT{{else}}{{#if pageDeliveries}}INBOUND{{else}}{{#if pageTransactions}}ACCOUNTS{{else}}<span class="eyebrow-line"></span> {{businessName}}{{/if}}{{/if}}{{/if}}{{/if}}{{/if}}{{/if}}</div><h1>{{#if pageReports}}Supplier reports{{else}}{{#if pageProducts}}Products &amp; supplies{{else}}{{#if pageOrders}}Purchase orders{{else}}{{#if pageDeliveries}}Deliveries{{else}}{{#if pageTransactions}}Transactions{{else}}{{title}}{{/if}}{{/if}}{{/if}}{{/if}}{{/if}}</h1><p class="page-subtitle">{{#if pageSettings}}Manage your supplier module preferences and local data.{{else}}{{#if pageReports}}Purchasing activity and supplier exposure at a glance.{{else}}{{#if pageProducts}}Ingredients and materials used across your kitchen.{{else}}{{#if pageOrders}}Create, approve and track orders sent to suppliers.{{else}}{{#if pageDeliveries}}Receive supplies, record discrepancies and follow partial shipments.{{else}}{{#if pageTransactions}}Supplier purchases, payments and outstanding balances.{{else}}{{pageDescription}}{{/if}}{{/if}}{{/if}}{{/if}}{{/if}}{{/if}}</p></div>
+          {{#if pageReports}}<button class="button button-secondary report-export-button" type="button" id="export-report-summary"><span aria-hidden="true">⇩</span> Export summary</button>{{else}}{{#if pageOrders}}<button class="button button-primary" type="button" data-open-order-dialog><span class="button-plus">+</span> Create purchase order</button>{{else}}{{#if pageDeliveries}}<button class="button button-primary" type="button" data-open-delivery-dialog><span class="button-plus">+</span> Record delivery</button>{{else}}{{#if pageTransactions}}<button class="button button-primary" type="button" data-open-payment-dialog><span class="button-plus">+</span> Record payment</button>{{else}}{{#if pageProducts}}<button class="button button-primary" type="button" data-open-supply-dialog><span class="button-plus">+</span> Add supply</button>{{else}}{{#if hasPrimaryAction}}<a class="button button-primary" href="#page-form"><span class="button-plus">+</span> {{primaryAction}}</a>{{/if}}{{/if}}{{/if}}{{/if}}{{/if}}{{/if}}
+        </div>
+        {{#if successMessage}}<div class="notice notice-success" role="status">{{successMessage}}</div>{{/if}}
+        {{#if errorMessage}}<div class="notice notice-error" role="alert">{{errorMessage}}</div>{{/if}}
+
+        {{#if pageProducts}}
+        <section class="products-list-section">
+          <div class="products-directory-toolbar">
+            <label class="search-box"><span>⌕</span><input type="search" data-table-search="#products-table" placeholder="Search products and supplies..." aria-label="Search products and supplies"></label>
+            <label class="filter-label"><span class="sr-only">Filter by category</span><select id="products-category-filter"><option value="">All categories</option>{{#each categories}}<option value="{{this}}">{{this}}</option>{{/each}}</select></label>
+            <button class="button button-secondary supplier-export-button" type="button" id="export-products"><span aria-hidden="true">⇩</span> Export</button>
+          </div>
+          <div class="directory-card ops-card products-list-card">
+          <div class="table-wrap"><table class="supplier-table ops-table products-directory-table" id="products-table"><thead><tr><th>PRODUCT / SUPPLY</th><th>CATEGORY</th><th>SUPPLIER</th><th>UNIT COST</th><th>ON HAND</th><th>REORDER POINT</th><th>STOCK STATUS</th><th><span class="sr-only">Actions</span></th></tr></thead><tbody>
+            {{#each products}}<tr data-search="{{name}} {{category}} {{supplierNames}}">
+              <td><div class="product-identity"><span class="product-avatar">{{initials}}</span><span><strong>{{name}}</strong><small>{{productCode}}</small></span></div></td>
+              <td>{{category}}</td><td>{{#if supplierNames}}{{supplierNames}}{{else}}<span class="muted">Unassigned</span>{{/if}}</td>
+              <td>{{../currencySymbol}}{{unitCost}} / {{unit}}</td><td>{{stockQuantity}} {{unit}}</td><td>{{reorderLevel}} {{unit}}</td>
+              <td><span class="stock-status-pill {{#if lowStock}}stock-status-low{{else}}stock-status-ok{{/if}}"><span></span>{{#if lowStock}}Low stock{{else}}In stock{{/if}}</span></td>
+              <td><div class="row-actions"><button class="icon-button edit-product" type="button" title="Edit product" aria-label="Edit {{name}}" data-id="{{id}}" data-name="{{name}}" data-category="{{category}}" data-unit="{{unit}}" data-cost="{{unitCost}}" data-stock="{{stockQuantity}}" data-reorder="{{reorderLevel}}" data-suppliers="{{json supplierIds}}"><span aria-hidden="true">✎</span></button>
+                <form action="/products/{{id}}/status" method="post" class="inline-form products-archive-form"><input type="hidden" name="status" value="{{#if isActive}}Inactive{{else}}Active{{/if}}"><button class="icon-button" type="submit" title="{{#if isActive}}Archive{{else}}Reactivate{{/if}}" aria-label="{{#if isActive}}Archive{{else}}Reactivate{{/if}} {{name}}">{{#if isActive}}⌑{{else}}↻{{/if}}</button></form></div></td>
+            </tr>{{else}}<tr><td class="empty-message" colspan="8">No products yet. Add ingredients and supplies below.</td></tr>{{/each}}
+          </tbody></table></div>
+          <div class="table-footer products-table-footer"><span>Showing <strong id="visible-products-count">{{products.length}}</strong> supplies</span><span class="directory-pagination" aria-label="Page 1">1</span></div>
+          </div>
+        </section>
+        <dialog class="supplier-dialog supply-dialog" id="supply-dialog" aria-labelledby="supply-dialog-title">
+          <div class="dialog-heading">
+            <div><h2 id="supply-dialog-title">Add supply</h2><p>Keep your ingredient catalog and reorder points up to date.</p></div>
+            <button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">×</button>
+          </div>
+          <form action="/products" method="post" id="supply-form" class="supply-modal-form">
+            <div class="supply-modal-fields">
+              <label class="form-field field-wide">Product name <span>*</span><input name="name" required maxlength="120" placeholder="e.g. Pork bacon"></label>
+              <label class="form-field">Category <span>*</span><select name="category" required><option value="">Choose category</option>{{#each categories}}<option>{{this}}</option>{{/each}}</select></label>
+              <label class="form-field">Primary supplier<select name="supplierIds"><option value="">Choose supplier</option>{{#each suppliers}}<option value="{{id}}">{{name}}</option>{{/each}}</select></label>
+              <label class="form-field">Unit <span>*</span><input name="unit" required maxlength="24" placeholder="kg, pcs, L"></label>
+              <label class="form-field">Unit cost ({{currencyCode}}) <span>*</span><input name="unitCost" type="number" min="0" step="0.01" value="0" required></label>
+              <label class="form-field">Quantity on hand <span>*</span><input name="stockQuantity" type="number" min="0" step="0.01" value="0" required></label>
+              <label class="form-field">Reorder point <span>*</span><input name="reorderLevel" type="number" min="0" step="0.01" value="0" required></label>
+            </div>
+            <div class="supply-modal-actions">
+              <button class="button button-secondary" type="button" data-close-dialog>Cancel</button>
+              <button class="button button-primary" type="submit">Save supply</button>
+            </div>
+          </form>
+        </dialog>
+        {{/if}}
+
+        {{#if pageOrders}}
+        <section class="purchase-orders-list-section">
+          <div class="purchase-orders-toolbar">
+            <label class="search-box"><span>⌕</span><input type="search" data-table-search="#orders-table" placeholder="Search order or supplier..." aria-label="Search order or supplier"></label>
+            <label class="filter-label"><span class="sr-only">Filter by status</span><select id="orders-status-filter"><option value="">All statuses</option><option>Draft</option><option>Pending</option><option>Approved</option><option>Sent to Supplier</option><option>Partially Delivered</option><option>Completed</option><option>Cancelled</option></select></label>
+            <button class="button button-secondary supplier-export-button" type="button" id="export-orders"><span aria-hidden="true">⇩</span> Export</button>
+          </div>
+          <div class="directory-card ops-card purchase-orders-card">
+            <div class="table-wrap"><table class="supplier-table ops-table purchase-orders-table" id="orders-table"><thead><tr><th>ORDER NUMBER</th><th>SUPPLIER</th><th>CREATED</th><th>EXPECTED DELIVERY</th><th>ITEMS</th><th>TOTAL</th><th>STATUS</th><th><span class="sr-only">ACTIONS</span></th></tr></thead><tbody>
+              {{#each orders}}<tr data-search="{{orderNumber}} {{Supplier.name}} {{status}} {{itemsLabel}}" data-status="{{status}}">
+                <td><strong>{{orderNumber}}</strong></td><td>{{Supplier.name}}</td><td>{{createdDateLabel}}</td><td>{{expectedDateLabel}}</td><td>{{itemCount}} items</td><td>{{../currencySymbol}}{{totalAmount}}</td><td><span class="order-status {{statusClass}}">{{status}}</span></td>
+                <td><div class="row-actions purchase-order-actions">
+                  {{#if isDraft}}<form action="/orders/{{id}}/status" method="post" class="inline-form"><input type="hidden" name="status" value="Pending"><button class="icon-button" type="submit" title="Submit order" aria-label="Submit {{orderNumber}}">↗</button></form>{{/if}}
+                  {{#if isPending}}<form action="/orders/{{id}}/status" method="post" class="inline-form"><input type="hidden" name="status" value="Approved"><button class="icon-button" type="submit" title="Approve order" aria-label="Approve {{orderNumber}}">✓</button></form>{{/if}}
+                  {{#if isApprovable}}{{#unless isPending}}<form action="/orders/{{id}}/status" method="post" class="inline-form"><input type="hidden" name="status" value="Sent to Supplier"><button class="icon-button" type="submit" title="Mark sent" aria-label="Mark {{orderNumber}} as sent">↗</button></form>{{/unless}}{{/if}}
+                  {{#if isDeliverable}}<a class="icon-button" href="/deliveries?record=1&amp;order={{id}}" title="Record delivery" aria-label="Record delivery for {{orderNumber}}">⬡</a>{{/if}}
+                  {{#if isCancellable}}<form action="/orders/{{id}}/status" method="post" class="inline-form cancel-order-form"><input type="hidden" name="status" value="Cancelled"><button class="icon-button" type="submit" title="Cancel order" aria-label="Cancel {{orderNumber}}">×</button></form>{{/if}}
+                </div></td>
+              </tr>{{else}}<tr><td class="empty-message" colspan="8">No purchase orders yet.</td></tr>{{/each}}
+              <tr class="no-results" id="no-orders-results" hidden><td class="empty-message" colspan="8">No purchase orders match your search and status filter.</td></tr>
+            </tbody></table></div>
+            <div class="table-footer purchase-orders-footer"><span><strong id="visible-orders-count">{{orders.length}}</strong> purchase orders</span><span>Sorted by most recent</span></div>
+          </div>
+        </section>
+        <section class="order-status-guide" aria-label="Purchase order status workflow"><strong>Order status workflow</strong><span>Draft</span><b>→</b><span>Pending</span><b>→</b><span>Approved</span><b>→</b><span>Sent to Supplier</span><b>→</b><span>Partially Delivered</span><b>→</b><span>Completed</span><small>Orders may be cancelled before delivery begins.</small></section>
+        {{#if suppliers.length}}
+        <dialog class="supplier-dialog purchase-order-dialog" id="order-dialog" aria-labelledby="order-dialog-title">
+          <div class="dialog-heading">
+            <div><h2 id="order-dialog-title">Create purchase order</h2><p>Choose a supplier and add the ingredients you need.</p></div>
+            <button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">×</button>
+          </div>
+          <form action="/orders" method="post" id="order-form" class="purchase-order-modal-form">
+            <input type="hidden" name="orderDate" value="{{today}}">
+            <input type="hidden" name="status" value="Pending">
+            <div class="purchase-order-fields">
+              <label class="form-field">Supplier <span>*</span><select name="supplierId" id="order-supplier" required><option value="">Choose supplier</option>{{#each suppliers}}<option value="{{id}}">{{name}}</option>{{/each}}</select></label>
+              <label class="form-field">Expected delivery <span>*</span><input type="date" name="expectedDate" min="{{today}}" required></label>
+              <div class="form-field field-wide">Order items</div>
+              <div id="order-item-rows" class="purchase-order-modal-items">
+                <div class="purchase-order-modal-row order-item-row">
+                  <select name="supplyId" required aria-label="Product"><option value="">Choose product</option>{{#each supplies}}<option value="{{id}}" data-unit="{{unit}}" data-cost="{{unitCost}}" data-suppliers="{{json supplierIds}}">{{name}}</option>{{/each}}</select>
+                  <input name="quantity" type="number" min="0.01" step="0.01" placeholder="Quantity" required aria-label="Quantity">
+                  <select class="order-item-unit-select" disabled aria-label="Unit"><option>unit</option></select>
+                  <input name="unitPrice" type="hidden" value="0">
+                  <button class="remove-row" type="button" aria-label="Remove item" disabled>×</button>
+                </div>
+              </div>
+              <button class="purchase-order-add-item" id="add-order-item" type="button"><span aria-hidden="true">+</span> Add another item</button>
+              <label class="form-field field-wide">Notes<textarea name="notes" rows="3" placeholder="Optional order notes"></textarea></label>
+            </div>
+            <div class="purchase-order-modal-actions">
+              <button class="button button-secondary" type="button" data-close-dialog>Cancel</button>
+              <button class="button button-primary" type="submit">Save as pending</button>
+            </div>
+          </form>
+        </dialog>
+        {{else}}<p class="inline-empty">Add an active supplier and at least one active product before creating a purchase order.</p>{{/if}}
+        {{/if}}
+
+        {{#if pageDeliveries}}
+        <section class="deliveries-list-section">
+          <div class="deliveries-toolbar">
+            <label class="search-box"><span>⌕</span><input type="search" data-table-search="#deliveries-table" placeholder="Search delivery, order or supplier..." aria-label="Search delivery, order or supplier"></label>
+            <label class="filter-label"><span class="sr-only">Filter by delivery status</span><select id="deliveries-status-filter"><option value="">All deliveries</option><option value="Partial">Partial</option><option value="Received">Received</option></select></label>
+          </div>
+          <div class="directory-card ops-card deliveries-card">
+            <div class="table-wrap"><table class="supplier-table ops-table deliveries-table" id="deliveries-table"><thead><tr><th>DELIVERY</th><th>PURCHASE ORDER</th><th>SUPPLIER</th><th>DELIVERED ON</th><th>ITEMS / QUANTITIES</th><th>RECEIVED BY</th><th>STATUS</th><th><span class="sr-only">VIEW</span></th></tr></thead><tbody>
+              {{#each deliveries}}<tr id="delivery-{{id}}" data-search="{{deliveryCode}} {{orderNumber}} {{supplierName}} {{receivedBy}} {{itemsLabel}} {{statusLabel}}" data-status="{{statusLabel}}">
+                <td>{{deliveryCode}}</td><td>{{orderNumber}}</td><td>{{supplierName}}</td><td>{{deliveredDateLabel}}</td><td class="delivery-items-cell">{{itemsLabel}}</td><td>{{receivedBy}}</td>
+                <td><span class="delivery-status-pill {{statusClass}}"><span></span>{{statusLabel}}</span></td>
+                <td><a class="icon-button delivery-view-link" href="#delivery-{{id}}" title="View delivery details" aria-label="View {{deliveryCode}}"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg></a></td>
+              </tr>{{else}}<tr><td class="empty-message" colspan="8">No deliveries recorded yet.</td></tr>{{/each}}
+              <tr class="no-results" id="no-deliveries-results" hidden><td class="empty-message" colspan="8">No deliveries match your search and status filter.</td></tr>
+            </tbody></table></div>
+            <div class="table-footer deliveries-table-footer"><span><strong id="visible-deliveries-count">{{deliveries.length}}</strong> delivery records</span><span>Partial deliveries stay open until complete</span></div>
+          </div>
+        </section>
+        <dialog class="supplier-dialog delivery-dialog" id="delivery-dialog" aria-labelledby="delivery-dialog-title">
+          <div class="dialog-heading">
+            <div><h2 id="delivery-dialog-title">Record delivery</h2><p>Log what arrived. Partial deliveries keep the order open.</p></div>
+            <button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">×</button>
+          </div>
+          {{#if openOrders.length}}
+          <form action="/deliveries" method="post" id="delivery-form" class="delivery-modal-form">
+            <div class="delivery-modal-fields">
+              <label class="form-field">Purchase order <span>*</span><select name="purchaseOrderId" id="delivery-order" required><option value="">Choose an order</option>{{#each openOrders}}<option value="{{id}}" data-order-number="{{orderNumber}}" data-supplier-name="{{supplierName}}" data-items="{{json items}}">{{orderNumber}} · {{supplierName}}</option>{{/each}}</select></label>
+              <label class="form-field">Delivery date <span>*</span><input type="date" name="deliveryDate" value="{{today}}" required></label>
+              <label class="form-field">Received by <span>*</span><input name="receivedBy" maxlength="120" required placeholder="Staff name"></label>
+              <label class="form-field">Delivery status<select id="delivery-status" disabled aria-label="Delivery status, based on quantities received"><option>Received</option><option>Partial</option></select></label>
+              <div class="form-field delivery-items-field field-wide">Items and quantities received <span>*</span><p class="delivery-help">Enter received quantities for each item. Damaged quantities are excluded from stock.</p><div id="delivery-items" class="delivery-lines"><p class="inline-empty">Choose an order to enter delivered quantities.</p></div></div>
+              <label class="form-field field-wide">Damaged / missing items and remarks<textarea name="remarks" rows="3" placeholder="Note any quantity differences, damage or follow-up"></textarea></label>
+            </div>
+            <div class="delivery-modal-actions">
+              <button class="button button-secondary" type="button" data-close-dialog>Cancel</button>
+              <button class="button button-primary" type="submit">Save delivery</button>
+            </div>
+          </form>
+          {{else}}<div class="delivery-no-orders"><p>No sent orders are awaiting delivery. Mark an approved order as sent first.</p><button class="button button-secondary" type="button" data-close-dialog>Close</button></div>{{/if}}
+        </dialog>
+        {{/if}}
+
+        {{#if pageTransactions}}
+        <section class="transaction-summary-grid" aria-label="Transaction summary">
+          <article class="transaction-summary-card"><span>Outstanding balance</span><strong>{{currencySymbol}}{{outstandingBalance}}</strong><small>Across {{openBalanceCount}} suppliers</small></article>
+          <article class="transaction-summary-card"><span>Purchases this month</span><strong>{{currencySymbol}}{{purchasesThisMonth}}</strong><small>{{monthlyPurchaseCount}} recorded purchases</small></article>
+          <article class="transaction-summary-card"><span>Payments recorded</span><strong>{{currencySymbol}}{{paymentsRecorded}}</strong><small>{{paymentCount}} supplier payment entries</small></article>
+        </section>
+        <section class="transactions-list-section">
+          <div class="transactions-toolbar">
+            <label class="search-box"><span>⌕</span><input type="search" data-table-search="#transactions-table" placeholder="Search supplier or reference..." aria-label="Search supplier or reference"></label>
+            <label class="filter-label"><span class="sr-only">Filter transactions</span><select id="transactions-type-filter"><option value="">All transactions</option><option value="Purchase">Purchases</option><option value="Payment">Payments</option><option value="Adjustment">Adjustments</option></select></label>
+            <button class="button button-secondary supplier-export-button" type="button" id="export-transactions"><span aria-hidden="true">⇩</span> Export</button>
+          </div>
+          <div class="directory-card ops-card transactions-card">
+          <div class="table-wrap"><table class="supplier-table ops-table transactions-table" id="transactions-table"><thead><tr><th>TRANSACTION</th><th>DATE</th><th>SUPPLIER</th><th>TYPE</th><th>REFERENCE</th><th>METHOD</th><th>AMOUNT</th><th>STATUS</th></tr></thead><tbody>
+            {{#each transactions}}<tr data-search="{{transactionCode}} {{supplierName}} {{referenceLabel}} {{orderNumber}} {{type}} {{method}} {{statusLabel}}" data-type="{{type}}">
+              <td>{{transactionCode}}</td><td>{{dateLabel}}</td><td>{{supplierName}}</td><td>{{type}}</td><td>{{referenceLabel}}</td><td>{{method}}</td><td>{{../currencySymbol}}{{amount}}</td>
+              <td><span class="transaction-status-pill {{statusClass}}"><span></span>{{statusLabel}}</span></td>
+            </tr>{{else}}<tr><td class="empty-message" colspan="8">No transactions recorded yet.</td></tr>{{/each}}
+            <tr class="no-results" id="no-transactions-results" hidden><td class="empty-message" colspan="8">No transactions match your search and type filter.</td></tr>
+          </tbody></table></div>
+          <div class="table-footer transactions-table-footer"><span><strong id="visible-transactions-count">{{transactions.length}}</strong> transactions</span><span>All amounts in {{currencyName}}</span></div>
+          </div>
+        </section>
+        <dialog class="supplier-dialog payment-dialog" id="payment-dialog" aria-labelledby="payment-dialog-title">
+          <div class="dialog-heading">
+            <div><h2 id="payment-dialog-title">Record supplier payment</h2><p>Log a payment and update the supplier's outstanding balance.</p></div>
+            <button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">×</button>
+          </div>
+          {{#if suppliers.length}}
+          <form action="/transactions" method="post" id="payment-form" class="payment-modal-form">
+            <div class="payment-modal-fields">
+              <label class="form-field field-wide">Supplier <span>*</span><select name="supplierId" id="payment-supplier" required><option value="">Choose supplier</option>{{#each suppliers}}<option value="{{id}}">{{name}}</option>{{/each}}</select></label>
+              <label class="form-field">Amount ({{currencyCode}}) <span>*</span><input name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required></label>
+              <label class="form-field">Payment date <span>*</span><input name="transactionDate" type="date" value="{{today}}" required></label>
+              <label class="form-field">Payment method <select name="method" required><option value="">Choose method</option>{{#each paymentMethods}}<option>{{this}}</option>{{/each}}</select></label>
+              <label class="form-field">Reference number<input name="reference" maxlength="100" placeholder="Invoice or transfer reference"></label>
+              <label class="form-field field-wide">Purchase order <span>*</span><select name="purchaseOrderId" id="payment-order" required><option value="">Choose an open order</option>{{#each orders}}<option value="{{id}}" data-supplier="{{supplierId}}" data-balance="{{remainingBalance}}">{{orderNumber}} — {{../currencySymbol}}{{remainingBalance}} remaining</option>{{/each}}</select></label>
+            </div>
+            <div class="payment-modal-actions">
+              <button class="button button-secondary" type="button" data-close-dialog>Cancel</button>
+              <button class="button button-primary" type="submit">Save payment</button>
+            </div>
+          </form>
+          {{else}}<div class="payment-no-suppliers"><p>Add an active supplier before recording a payment.</p><button class="button button-secondary" type="button" data-close-dialog>Close</button></div>{{/if}}
+        </dialog>
+        {{/if}}
+
+        {{#if pageReports}}
+        <section class="report-summary-grid" aria-label="Supplier report summary">
+          <article class="report-summary-card"><span>Total supplier spend</span><strong id="report-total-spend">{{currencySymbol}}{{totalPurchasesLabel}}</strong><small>Recorded supplier purchases</small></article>
+          <article class="report-summary-card"><span>Open purchase orders</span><strong id="report-open-orders">{{openOrderCount}}</strong><small>Awaiting fulfillment</small></article>
+          <article class="report-summary-card"><span>Supplier partners</span><strong id="report-active-suppliers">{{activeSupplierCount}}</strong><small>Active in the directory</small></article>
+        </section>
+        <section class="directory-card ops-card report-category-card">
+          <div class="report-section-heading"><div><h2>Purchasing by supplier category</h2><p>Total recorded spend · {{currencyCode}}</p></div><span class="report-period">CURRENT PERIOD</span></div>
+          <div class="report-category-list" id="report-category-list">{{#each categorySpend}}
+            <div class="report-category-row" data-category="{{category}}" data-amount="{{amountLabel}}"><span>{{category}}</span><div class="report-category-track"><i style="width: {{barWidth}}"></i></div><strong>{{../currencySymbol}}{{amountLabel}}</strong></div>
+          {{else}}<p class="report-empty">No categorized purchasing data yet.</p>{{/each}}</div>
+        </section>
+        <section class="directory-card ops-card report-balances-card">
+          <div class="report-section-heading"><div><h2>Supplier balances</h2><p>Outstanding accounts by supplier</p></div><a class="report-transactions-link" href="/transactions">Transactions <span aria-hidden="true">↗</span></a></div>
+          <div class="table-wrap"><table class="supplier-table ops-table report-balances-table" id="report-balances-table"><thead><tr><th>SUPPLIER</th><th>PAYMENT TERMS</th><th>TOTAL PURCHASES</th><th>BALANCE DUE</th></tr></thead><tbody>{{#each balances}}<tr data-supplier="{{name}}" data-terms="{{paymentTerms}}" data-purchases="{{purchasesLabel}}" data-balance="{{balanceLabel}}"><td>{{name}}</td><td>{{paymentTerms}}</td><td>{{../currencySymbol}}{{purchasesLabel}}</td><td>{{../currencySymbol}}{{balanceLabel}}</td></tr>{{else}}<tr><td class="empty-message" colspan="4">No supplier balances available.</td></tr>{{/each}}</tbody></table></div>
+        </section>
+        {{/if}}
+
+        {{#if pageSettings}}
+        <section class="directory-card settings-preferences-card" aria-label="Workspace preferences">
+          <div class="settings-preference-row settings-profile-row">
+            <div class="settings-preference-copy"><h2>Restaurant profile</h2><p>{{workspaceSettings.businessName}} · {{workspaceSettings.profileDescription}}</p></div>
+            <details class="settings-edit-details"><summary class="button button-secondary"><span aria-hidden="true">✎</span> Edit</summary>
+              <form action="/settings" method="post" class="settings-edit-form">
+                <label class="form-field field-wide">Restaurant name <span>*</span><input name="businessName" maxlength="120" required value="{{workspaceSettings.businessName}}"></label>
+                <label class="form-field field-wide">Contact email<input name="contactEmail" type="email" maxlength="160" value="{{workspaceSettings.contactEmail}}" placeholder="restaurant@example.com"></label>
+                <label class="form-field">Currency <span>*</span><select name="currency" required><option value="PHP" {{#if workspaceSettings.isPHP}}selected{{/if}}>PHP — Philippine Peso</option><option value="USD" {{#if workspaceSettings.isUSD}}selected{{/if}}>USD — US Dollar</option></select></label>
+                <label class="form-field">Low-stock threshold <span>*</span><input name="lowStockThreshold" type="number" min="0" step="0.01" required value="{{workspaceSettings.lowStockThreshold}}"></label>
+                <div class="settings-form-actions"><button class="button button-primary" type="submit">Save changes</button></div>
+              </form>
+            </details>
+          </div>
+          <div class="settings-preference-row">
+            <div class="settings-preference-copy"><h2>Currency</h2><p>{{workspaceSettings.currencyLabel}} ({{workspaceSettings.currency}})</p></div>
+            <span class="settings-currency-badge"><i></i>{{workspaceSettings.currency}} · {{workspaceSettings.currencySymbol}}</span>
+          </div>
+          <div class="settings-preference-row">
+            <div class="settings-preference-copy"><h2>Data storage</h2><p>Export a copy of your supplier records and settings.</p></div>
+            <a class="button button-secondary" href="/settings/export"><span aria-hidden="true">⇩</span> Export data</a>
+          </div>
+        </section>
+        {{/if}}
+
+        <footer class="page-footer">JAPZ GRILL &amp; BISTRO <span>•</span> Supplier Management</footer>
+      </section>
+    </main>
+  </div>
+  {{#if pageProducts}}<dialog class="supplier-dialog" id="edit-product-dialog"><form id="edit-product-form" method="post"><div class="dialog-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> PRODUCT CATALOG</div><h2>Edit product</h2><p>Update product details and inventory levels.</p></div><button class="dialog-close" type="button" data-close-dialog aria-label="Close dialog">×</button></div>
+    <div class="form-grid"><label class="form-field field-wide">Product name <span>*</span><input name="name" required maxlength="120"></label><label class="form-field">Category <span>*</span><select name="category" required>{{#each categories}}<option>{{this}}</option>{{/each}}</select></label><label class="form-field">Unit <span>*</span><input name="unit" required maxlength="24"></label><label class="form-field">Unit cost ({{currencySymbol}}) <span>*</span><input name="unitCost" type="number" min="0" step="0.01" required></label><label class="form-field">Current stock <span>*</span><input name="stockQuantity" type="number" min="0" step="0.01" required></label><label class="form-field">Reorder level <span>*</span><input name="reorderLevel" type="number" min="0" step="0.01" required></label><label class="form-field field-wide">Suppliers<select name="supplierIds" multiple size="4">{{#each suppliers}}<option value="{{id}}">{{name}}</option>{{/each}}</select><small>Select all suppliers that can provide this item.</small></label></div>
+    <div class="dialog-actions"><button class="button button-secondary" type="button" data-close-dialog>Cancel</button><button class="button button-primary" type="submit">Save changes</button></div></form></dialog>{{/if}}
+  <script src="/js/supplier.js" defer></script>
+{{> footer }}
