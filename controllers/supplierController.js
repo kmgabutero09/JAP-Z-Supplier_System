@@ -33,7 +33,7 @@ export const dashboardPage = async (req, res, next) => {
     const nextMonthStart = new Date(Date.UTC(now.getFullYear(), now.getMonth() + 1, 1)).toISOString().slice(0, 10);
     const firstMonth = new Date(Date.UTC(now.getFullYear(), now.getMonth() - 11, 1));
     const purchasingWindowStart = firstMonth.toISOString().slice(0, 10);
-    const [suppliers, pendingOrders, deliveriesThisMonth, purchases, payments, recentOrders, upcomingOrders, recentSuppliers, recentDeliveries, recentPayments, monthlyOrders, lowStockRecords, currency, businessNameSetting] = await Promise.all([
+    const [suppliers, pendingOrders, deliveriesThisMonth, purchases, payments, recentOrders, upcomingOrders, pendingApprovalOrders, recentSuppliers, recentDeliveries, recentPayments, monthlyOrders, lowStockRecords, currency, businessNameSetting] = await Promise.all([
       Supplier.findAll({ attributes: ["id", "name", "status", "category"] }),
       PurchaseOrder.count({ where: { status: { [Op.in]: ["Pending", "Approved", "Sent to Supplier", "Partially Delivered"] } } }),
       Delivery.count({ where: { deliveryDate: { [Op.gte]: monthStart, [Op.lt]: nextMonthStart } } }),
@@ -49,6 +49,12 @@ export const dashboardPage = async (req, res, next) => {
         order: [["expectedDate", "ASC"]],
         limit: 5
       }),
+      PurchaseOrder.findAll({
+        where: { status: "Pending" },
+        include: [Supplier],
+        order: [["createdAt", "DESC"]],
+        limit: 5
+      }),
       Supplier.findAll({ order: [["createdAt", "DESC"]], limit: 5 }),
       Delivery.findAll({ include: [{ model: PurchaseOrder, include: [Supplier] }], order: [["deliveryDate", "DESC"], ["createdAt", "DESC"]], limit: 8 }),
       SupplierTransaction.findAll({ where: { type: "Payment" }, include: [Supplier], order: [["transactionDate", "DESC"], ["createdAt", "DESC"]], limit: 8 }),
@@ -61,7 +67,7 @@ export const dashboardPage = async (req, res, next) => {
       }),
       Supply.findAll({
         where: { status: "Active" },
-        attributes: ["name", "unit", "stockQuantity", "reorderLevel"],
+        attributes: ["id", "name", "unit", "stockQuantity", "reorderLevel"],
         include: [{ model: Supplier, as: "Suppliers", attributes: ["name"], through: { attributes: [] } }],
         order: [["name", "ASC"]]
       }),
@@ -140,6 +146,35 @@ export const dashboardPage = async (req, res, next) => {
         supplierName: supply.Suppliers.map((supplier) => supplier.name).join(", ") || "No supplier assigned"
       }))
       .slice(0, 5);
+    const notificationDate = new Date(`${now.toISOString().slice(0, 10)}T00:00:00.000Z`);
+    const nextWeek = new Date(notificationDate);
+    nextWeek.setUTCDate(nextWeek.getUTCDate() + 7);
+    const nextWeekDate = nextWeek.toISOString().slice(0, 10);
+    const notificationItems = [
+      ...pendingApprovalOrders.map((order) => ({
+        id: `order-${order.id}`,
+        title: "Purchase order awaiting approval",
+        detail: `${order.orderNumber} · ${order.Supplier?.name || "Supplier"}`,
+        href: "/orders",
+        kind: "order"
+      })),
+      ...lowStockSupplies.map((supply) => ({
+        id: `supply-${supply.id}`,
+        title: `Low stock: ${supply.name}`,
+        detail: `${supply.stockQuantity} ${supply.unit} left · reorder at ${supply.reorderLevel} ${supply.unit}`,
+        href: "/products",
+        kind: "stock"
+      })),
+      ...upcomingOrders
+        .filter((order) => String(order.expectedDate).slice(0, 10) <= nextWeekDate)
+        .map((order) => ({
+          id: `delivery-${order.id}`,
+          title: "Delivery due soon",
+          detail: `${order.orderNumber} · ${order.Supplier?.name || "Supplier"} · ${formatDate(order.expectedDate)}`,
+          href: "/deliveries",
+          kind: "delivery"
+        }))
+    ].slice(0, 10);
 
     res.render("supplier/dashboard.xian", {
       title: "Dashboard",
@@ -169,6 +204,8 @@ export const dashboardPage = async (req, res, next) => {
       nextDeliveryLabel: upcomingOrders[0]?.expectedDate ? formatDate(upcomingOrders[0].expectedDate) : "",
       recentActivities: activities,
       lowStockSupplies,
+      notificationItems,
+      notificationCount: notificationItems.length,
       monthlyPurchasing,
       currentMonthPurchases: monthlyPurchasing.at(-1)?.total || 0,
       successMessage: req.flash("success_msg")[0],

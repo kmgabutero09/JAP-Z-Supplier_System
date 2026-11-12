@@ -2,6 +2,48 @@
 const detailsDialog = document.querySelector("#details-dialog");
 const supplierForm = document.querySelector("#supplier-form");
 
+document.querySelectorAll("[data-print-page]").forEach((button) => {
+  button.addEventListener("click", () => window.print());
+});
+
+const notificationToggle = document.querySelector("#notification-toggle");
+const notificationPanel = document.querySelector("#notification-panel");
+if (notificationToggle && notificationPanel) {
+  const setNotificationPanelOpen = (isOpen) => {
+    notificationPanel.hidden = !isOpen;
+    notificationToggle.setAttribute("aria-expanded", String(isOpen));
+  };
+
+  notificationToggle.addEventListener("click", () => {
+    setNotificationPanelOpen(notificationPanel.hidden);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".notification-wrap")) setNotificationPanelOpen(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setNotificationPanelOpen(false);
+  });
+
+  if (new URLSearchParams(window.location.search).get("notifications") === "1") {
+    setNotificationPanelOpen(true);
+    window.history.replaceState(null, "", window.location.pathname);
+  }
+}
+
+const dashboardGreeting = document.querySelector("#dashboard-greeting");
+if (dashboardGreeting) {
+  const updateDashboardGreeting = () => {
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+    dashboardGreeting.textContent = `${greeting}, Japz team`;
+  };
+
+  updateDashboardGreeting();
+  setInterval(updateDashboardGreeting, 60_000);
+}
+
 document.querySelector("#today-label").textContent = new Intl.DateTimeFormat("en-PH", {
   weekday: "short",
   month: "short",

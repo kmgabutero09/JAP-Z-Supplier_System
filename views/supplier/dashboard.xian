@@ -28,7 +28,23 @@
         <div class="topbar-right">
           <svg class="dashboard-date-icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2"></rect><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9.5h17"></path></svg>
           <span class="today-label" id="today-label"></span>
-          <span class="dashboard-notification" role="img" aria-label="Notifications"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg><i></i></span>
+          <div class="notification-wrap">
+            <button class="dashboard-notification" id="notification-toggle" type="button" aria-label="Notifications{{#if notificationCount}}, {{notificationCount}} alerts{{/if}}" aria-expanded="false" aria-controls="notification-panel">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"></path></svg>
+              {{#if notificationCount}}<span class="notification-count">{{notificationCount}}</span>{{/if}}
+            </button>
+            <section class="notification-panel" id="notification-panel" aria-label="Notifications" hidden>
+              <div class="notification-panel-heading"><strong>Notifications</strong><span>{{notificationCount}}</span></div>
+              <div class="notification-list">
+                {{#each notificationItems}}
+                <a class="notification-item notification-{{kind}}" href="{{href}}" data-notification-id="{{id}}">
+                  <span class="notification-item-mark" aria-hidden="true"></span>
+                  <span class="notification-item-copy"><strong>{{title}}</strong><small>{{detail}}</small></span>
+                </a>
+                {{else}}<p class="notification-empty">You're all caught up.</p>{{/each}}
+              </div>
+            </section>
+          </div>
           <span class="topbar-avatar">JG</span>
         </div>
       </header>
@@ -37,7 +53,7 @@
         <div class="welcome-row">
           <div>
             <div class="eyebrow">SUPPLIER OPERATIONS</div>
-            <h1>Good morning, Japz team</h1>
+            <h1 id="dashboard-greeting">Good morning, Japz team</h1>
             <p class="page-subtitle">Your kitchen supply chain at a glance.</p>
           </div>
           <a class="button button-primary" href="/orders?create=1"><span class="button-plus">+</span> Create purchase order</a>
